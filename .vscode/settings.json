@@ -1,0 +1,29 @@
+{
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+    ],
+    "workbench.colorTheme": "Tokyo Night",
+    "editor.fontSize": 16,
+    "editor.fontFamily": "Cascadia Code",
+    
+    "editor.fontLigatures": true,
+    "editor.fontWeight": "100",
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+    "liveServer.settings.port": 5501,
+    //
+    "editor.minimap.enabled": false,
+    "editor.cursorStyle": "line",
+    "editor.renderWhitespace": "boundary",
+    "editor.acceptSuggestionOnCommitCharacter": false,
+    // "editor.lineHeight": 25,
+    "files.autoSave": "onFocusChange",
+    "files.defaultLanguage": "markdown",
+    "workbench.tree.indent": 15,
+    "workbench.tree.renderIndentGuides": "always",
+    "emmet.triggerExpansionOnTab": true,
+    "git.enableSmartCommit": true,
+}

@@ -1,0 +1,20 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "this is node/express project course",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/01_setup/server.js"
+  },
+  "keywords": [],
+  "author": "The Customer",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}
