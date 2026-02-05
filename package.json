@@ -4,7 +4,7 @@
   "description": "this is node/express project course",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/01_setup/server.js"
+    "dev": "nodemon src/02_Express_basics/server.js"
   },
   "keywords": [],
   "author": "The Customer",
