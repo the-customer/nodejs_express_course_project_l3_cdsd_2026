@@ -3,32 +3,41 @@ import {
 } from "express";
 import {
     books
-} from "./data.js";
+} from "../data/books.data.js";
+import loansRouter from "../routes/loans.routes.js";
+import {
+    loans
+} from "../data/loans.data.js";
 
-export const router = Router();
-
-/**
- * GET /
- */
-router.get("/", (req, res) => {
-    res.send("Express chapter 02 - Basics")
-});
+const router = Router();
 
 /**
- * GET /health
+ * Param global : bookId
+ * s'execute une fois quand :id est present 
  */
-router.get("/health", (req, res) => {
-    res.status(200).json({
-        status: "ok",
-        chapter: 2,
-        time: new Date().toISOString()
-    })
-});
+router.param("id", (req, res, next, id) => {
+    const bookId = Number(id)
+    if (Number.isNaN(bookId)) {
+        return res.status(400).json({
+            error: "id must be a number!"
+        })
+    }
+    const book = books.find(b => b.id === bookId);
+    if (!book) {
+        return res.status(400).json({
+            error: "book not found!"
+        })
+    }
+    //injecter l'id dans les parametre global
+    req.book = book;
+    next()
+})
+
 /**
  * GET /books?q=&limit=&available=&sort=title|id
  * Query Params
  */
-router.get("/books", (req, res) => {
+router.get("/", (req, res) => {
     const q = String(req.query.q || "").trim().toLowerCase();
     const available = req.query.available; //1, 0, undefined
     let limit = req.query.limit ? req.query.limit : "10";
@@ -89,28 +98,11 @@ router.get("/books", (req, res) => {
         results
     });
 });
-
-/**
- * GET /books/:id
- * Path Params
- */
-router.get("/books/:id", (req, res) => {
-    const idBook = +req.params.id;
-    if (Number.isNaN(idBook)) {
-        return res.status(400).json({
-            error: "id must be a number!"
-        })
-    }
-    const book = books.find(b => b.id === idBook)
-    return res.status(200).json({
-        book
-    })
-});
 /**
  * POST /books
  * Body json
  */
-router.post("/books", (req, res) => {
+router.post("/", (req, res) => {
     const {
         title,
         author
@@ -143,10 +135,34 @@ router.post("/books", (req, res) => {
     });
 });
 /**
+ * GET /books/stat
+ */
+router.get('/stats', (req, res) => {
+    //
+    const total = books.length;
+    const available = books.filter(book => book.available).length;
+    const unavailable = total - available;
+    return res.status(200).json({
+        totalBooks: total,
+        availableBooks: available,
+        unavailableBooks: unavailable
+    })
+})
+/**
+ * GET /books/:id
+ * Path Params
+ */
+router.get("/:id", (req, res) => {
+    const book = req.book;
+    return res.status(200).json({
+        book
+    })
+});
+/**
  * PATCH /books/:id
  * Modifier une partie
  */
-router.patch("/books/:id", (req, res) => {
+router.patch("/:id", (req, res) => {
     const idBook = Number(req.params.id);
     if (Number.isNaN(idBook)) return res.status(400).json({
         error: "id must bi a number"
@@ -182,7 +198,7 @@ router.patch("/books/:id", (req, res) => {
 /**
  * DELETE /books/:id
  */
-router.delete("/books/:id", (req, res) => {
+router.delete("/:id", (req, res) => {
     const idBook = Number(req.params.id);
     if (Number.isNaN(idBook)) return res.status(400).json({
         error: "id must bi a number"
@@ -200,20 +216,28 @@ router.delete("/books/:id", (req, res) => {
 })
 
 /**
- * GET /stat
+ * GET /api/v1/books/:id/loans
+ * SANS Nested routes
  */
-router.get('/stats', (req, res) => {
-    //
-    const total = books.length;
-    const available = books.filter(book => book.available).length;
-    const unavailable = total - available;
-    return res.status(200).json({
-        totalBooks: total,
-        availableBooks: available,
-        unavailableBooks: unavailable
-    })
-})
+// router.get('/:id/loans', (req, res) => {
+//     const bookId = Number(req.params.id);
+//     const bookLoans = loans.filter(l => l.bookId === bookId)
 
+//     return res.json({
+//         bookId,
+//         results: bookLoans,
+//         count: bookLoans.length
+//     })
+// })
+/**
+ * GET /api/v1/books/:id/loans
+ * AVEC Nested routes
+ */
+router.use('/:id/loans', loansRouter)
+
+
+
+export default router;
 
 /**
  * Ajouter la route : /stats qui renvoie les statistique (nbr de livre total, disponible et indisponible)
