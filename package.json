@@ -6,7 +6,8 @@
   "scripts": {
     "dev01": "nodemon src/01_setup/server.js",
     "dev02": "nodemon src/02_Express_basics/server.js",
-    "dev03": "nodemon src/03_routing_advanced/server.js"
+    "dev03": "nodemon src/03_routing_advanced/server.js",
+    "dev04": "nodemon src/04_middlewares/server.js"
   },
   "keywords": [],
   "author": "The Customer",
