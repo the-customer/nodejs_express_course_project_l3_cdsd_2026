@@ -20,7 +20,13 @@ export function createApp() {
     //global middleware
     app.use(requireJSON);
     app.use(requestId);
-    app.use(rateLimiter());
+    app.use(rateLimiter({
+        windowMs: 60000,
+        maxRequests: 10,
+        skip: (req) => {
+            return req.path === "/api/v1/health"
+        }
+    }));
 
     //Utiliser le router:
     app.use('/api/v1/', apiRoutes);

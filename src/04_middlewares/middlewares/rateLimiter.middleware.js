@@ -1,9 +1,14 @@
 export function rateLimiter({
     windowMs = 60000,
-    maxRequests = 10
+    maxRequests = 10,
+    skip = () => false
 } = {}) {
     const hits = new Map(); // ip -> {count,resetAt}
     return (req, res, next) => {
+        //skip somes routes
+        if (skip(req)) {
+            return next();
+        }
         // const ip = req.headers["x-forwarded-for"]?.split(",")[0].trim()
         let ip = req.headers["x-forwarded-for"] ? req.headers["x-forwarded-for"].split(",")[0].trim() : undefined
         if (!ip) {
