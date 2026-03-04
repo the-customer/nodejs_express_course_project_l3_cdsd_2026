@@ -6,6 +6,9 @@ import {
 import {
     requestId
 } from "./middlewares/requestId.middleware.js";
+import {
+    rateLimiter
+} from "./middlewares/rateLimiter.middleware.js";
 
 
 
@@ -17,6 +20,7 @@ export function createApp() {
     //global middleware
     app.use(requireJSON);
     app.use(requestId);
+    app.use(rateLimiter());
 
     //Utiliser le router:
     app.use('/api/v1/', apiRoutes);

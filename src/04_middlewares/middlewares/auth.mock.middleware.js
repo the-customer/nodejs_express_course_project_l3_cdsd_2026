@@ -40,8 +40,8 @@ export function authMock(requireRole = null) {
 // function somme3(a, b, c) {
 //     return somme2(a,b) + c;
 // }
-authMock("ADMIN")
-authMock()
+// authMock("ADMIN")
+// authMock()
 
 
 /**
