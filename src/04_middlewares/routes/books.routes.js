@@ -50,7 +50,6 @@ router.param("id", (req, res, next, id) => {
 
 
 router.get("/", timer, authMock("ADMIN"), (req, res) => {
-    console.log(req)
     const q = String(req.query.q || "").trim().toLowerCase();
     const available = req.query.available; //1, 0, undefined
     let limit = req.query.limit ? req.query.limit : "10";
@@ -211,7 +210,7 @@ router.patch("/:id", (req, res) => {
 /**
  * DELETE /books/:id
  */
-router.delete("/:id", (req, res) => {
+router.delete("/:id", authMock("ADMIN"), (req, res) => {
     const idBook = Number(req.params.id);
     if (Number.isNaN(idBook)) return res.status(400).json({
         error: "id must bi a number"

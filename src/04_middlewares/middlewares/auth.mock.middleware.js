@@ -1,5 +1,15 @@
+/**
+ * 
+ * @param {*} requireRole 
+ * @returns 
+ * Header expected:
+ * x-user-role: ADMIN | USER
+ * middleware factory
+ */
 export function authMock(requireRole = null) {
     return (req, res, next) => {
+        // console.log(req.get("Content-Type"))
+        console.log("content-type:", req.headers["content-type"])
         const role = req.headers["x-user-role"];
         if (!role) {
             return res.status(401).json({
@@ -32,3 +42,10 @@ export function authMock(requireRole = null) {
 // }
 authMock("ADMIN")
 authMock()
+
+
+/**
+ * 1. Ajouter un middleware "requireJSON" (refuse si le Content-Type n'est pas du json)
+ * 2. Ajouter un middleware "requestId" (ajouter un id a la requete : utiliser un uuid)
+ * 3. Bloquer DELETE /books sauf pour ADMIN
+ */
